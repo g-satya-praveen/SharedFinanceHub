@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shared Finance Hub - Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ["Sora", "ui-sans-serif", "system-ui"],
+            body: ["Space Grotesk", "ui-sans-serif", "system-ui"]
+          },
+          boxShadow: {
+            soft: "0 20px 45px rgba(15, 23, 42, 0.12)"
+          },
+          keyframes: {
+            rise: {
+              "0%": { opacity: "0", transform: "translateY(16px)" },
+              "100%": { opacity: "1", transform: "translateY(0)" }
+            }
+          },
+          animation: {
+            rise: "rise 700ms ease both"
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="app-db.js"></script>
+  <script src="server-api.js"></script>
+</head>
+<body class="font-body bg-slate-100 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div class="min-h-screen bg-[radial-gradient(circle_at_0%_0%,#fef3c7_0%,transparent_38%),radial-gradient(circle_at_100%_0%,#bae6fd_0%,transparent_38%),linear-gradient(160deg,#f8fafc_0%,#e2e8f0_100%)] dark:bg-[radial-gradient(circle_at_0%_0%,rgba(245,158,11,0.20)_0%,transparent_38%),radial-gradient(circle_at_100%_0%,rgba(34,211,238,0.18)_0%,transparent_38%),linear-gradient(160deg,#020617_0%,#0f172a_100%)]">
+    <main class="mx-auto grid min-h-screen w-[min(1100px,95vw)] grid-cols-1 items-center gap-8 py-8 lg:grid-cols-2">
+      <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-cyan-900 to-emerald-700 p-8 text-white shadow-soft animate-rise dark:from-slate-950 dark:via-sky-950 dark:to-emerald-950">
+        <div class="absolute -top-24 -right-20 h-72 w-72 rounded-full bg-white/10 blur-2xl"></div>
+        <div class="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-cyan-300/20 blur-2xl"></div>
+        <div class="relative">
+          <p class="inline-flex rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest">Shared Finance Hub</p>
+          <h1 class="mt-4 font-display text-3xl md:text-5xl font-extrabold leading-tight">Create your account.</h1>
+          <p class="mt-4 max-w-xl text-cyan-50/90 md:text-lg">
+            Register with your email, password, confirm password, and name to start sharing expenses in a transparent way.
+          </p>
+          <div class="mt-6 grid grid-cols-2 gap-3 text-sm">
+            <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+              <p class="text-cyan-100">One account</p>
+              <p class="mt-1 font-semibold">One email, one password, one name</p>
+            </div>
+            <div class="rounded-2xl border border-white/20 bg-white/10 p-4">
+              <p class="text-cyan-100">Secure handoff</p>
+              <p class="mt-1 font-semibold">Go to the dashboard after sign up</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="relative rounded-3xl border border-slate-200 bg-white p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+        <button id="themeToggle" type="button" class="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full border border-slate-200 bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" aria-label="Toggle dark and light mode">
+          <svg id="themeIconSun" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg id="themeIconMoon" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <div class="pr-12">
+          <h2 class="font-display text-2xl md:text-3xl font-bold">Sign up</h2>
+          <p class="mt-2 text-slate-600 dark:text-slate-300">Create a new account for the shared finance dashboard.</p>
+
+          <form id="signupForm" class="mt-6 space-y-4">
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" for="email">Email</label>
+              <input id="email" type="email" placeholder="you@example.com" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" for="password">Password</label>
+              <div class="relative">
+                <input id="password" type="password" placeholder="Enter password" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-24 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
+                <button id="togglePassword" type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg border border-slate-300 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">Show</button>
+              </div>
+              <p id="passwordStrength" class="mt-1 text-xs text-slate-500 dark:text-slate-400">Use at least 8 characters with mixed letters and numbers.</p>
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" for="confirmPassword">Confirm Password</label>
+              <div class="relative">
+                <input id="confirmPassword" type="password" placeholder="Confirm password" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 pr-24 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
+                <button id="toggleConfirmPassword" type="button" class="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg border border-slate-300 bg-slate-50 px-3 py-1 text-xs font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700">Show</button>
+              </div>
+              <p id="passwordMatchHint" class="mt-1 text-xs text-slate-500 dark:text-slate-400"></p>
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" for="name">Name</label>
+              <input id="name" type="text" placeholder="Your name" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
+            </div>
+            <button class="w-full rounded-xl bg-gradient-to-r from-cyan-600 to-emerald-600 px-4 py-3 font-semibold text-white transition hover:from-cyan-700 hover:to-emerald-700">Create account</button>
+          </form>
+
+          <div class="mt-5 flex flex-wrap items-center gap-3 text-sm">
+            <a href="login.html" class="rounded-full bg-slate-900 px-4 py-2 font-semibold text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200">Back to login</a>
+            <a href="admin-login.html" class="rounded-full border border-slate-300 px-4 py-2 font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Admin</a>
+          </div>
+
+          <p id="messageBox" class="mt-4 hidden rounded-xl border px-4 py-3 text-sm"></p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const pageAssignmentsKey = "shared-finance-user-pages";
+    const pagePool = [
+      "user-home-1.html",
+      "user-home-2.html",
+      "user-home-3.html",
+      "user-home-4.html",
+      "user-home-5.html",
+      "user-home-6.html",
+      "user-home-7.html",
+      "user-home-8.html",
+      "user-home-9.html",
+      "user-home-10.html"
+    ];
+    const adminAllowlist = ["admin@sharedfinancehub.com", "owner@sharedfinancehub.com"];
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIconSun = document.getElementById("themeIconSun");
+    const themeIconMoon = document.getElementById("themeIconMoon");
+    const signupForm = document.getElementById("signupForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const confirmPasswordInput = document.getElementById("confirmPassword");
+    const togglePassword = document.getElementById("togglePassword");
+    const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+    const passwordStrength = document.getElementById("passwordStrength");
+    const passwordMatchHint = document.getElementById("passwordMatchHint");
+    const nameInput = document.getElementById("name");
+    const messageBox = document.getElementById("messageBox");
+
+    function applyTheme(theme) {
+      const isDark = theme === "dark";
+      document.documentElement.classList.toggle("dark", isDark);
+      themeIconSun.classList.toggle("hidden", isDark);
+      themeIconMoon.classList.toggle("hidden", !isDark);
+      themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      FinanceDB.setTheme(theme);
+    }
+
+    function getAssignments() {
+      return FinanceDB.getPageAssignments();
+    }
+
+    function saveAssignments(assignments) {
+      FinanceDB.setPageAssignments(assignments);
+    }
+
+    function getAssignedPage(email) {
+      const assignments = getAssignments();
+      const normalizedEmail = email.toLowerCase();
+      if (assignments[normalizedEmail]) {
+        return assignments[normalizedEmail];
+      }
+
+      const used = new Set(Object.values(assignments));
+      const available = pagePool.find((page) => !used.has(page));
+      if (!available) return null;
+
+      assignments[normalizedEmail] = available;
+      saveAssignments(assignments);
+      return available;
+    }
+
+    function showMessage(text, kind) {
+      messageBox.className = "mt-4 rounded-xl border px-4 py-3 text-sm";
+      if (kind === "error") {
+        messageBox.classList.add("border-rose-200", "bg-rose-50", "text-rose-800", "dark:border-rose-900/40", "dark:bg-rose-950/40", "dark:text-rose-100");
+      } else {
+        messageBox.classList.add("border-emerald-200", "bg-emerald-50", "text-emerald-800", "dark:border-emerald-900/40", "dark:bg-emerald-950/40", "dark:text-emerald-100");
+      }
+      messageBox.textContent = text;
+      messageBox.classList.remove("hidden");
+    }
+
+    const savedTheme = FinanceDB.getTheme();
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(savedTheme || (prefersDark ? "dark" : "light"));
+
+    const userSession = FinanceDB.getUserSession();
+    if (userSession.authenticated && ServerAPI.getToken()) {
+      try {
+        const activeUser = userSession.user;
+        if (activeUser && activeUser.email) {
+          const page = getAssignedPage(activeUser.email);
+          if (page) {
+            window.location.replace(page);
+          }
+        }
+      } catch {
+        FinanceDB.clearUserSession();
+      }
+    } else if (userSession.authenticated && !ServerAPI.getToken()) {
+      FinanceDB.clearUserSession();
+    }
+
+    themeToggle.addEventListener("click", () => {
+      applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+    });
+
+    function updatePasswordQuality() {
+      const password = passwordInput.value;
+      const confirm = confirmPasswordInput.value;
+      const hasLength = password.length >= 8;
+      const hasLetters = /[a-zA-Z]/.test(password);
+      const hasNumbers = /\d/.test(password);
+
+      if (hasLength && hasLetters && hasNumbers) {
+        passwordStrength.className = "mt-1 text-xs text-emerald-700 dark:text-emerald-300";
+        passwordStrength.textContent = "Strong password format.";
+      } else {
+        passwordStrength.className = "mt-1 text-xs text-amber-700 dark:text-amber-300";
+        passwordStrength.textContent = "Use at least 8 characters with letters and numbers.";
+      }
+
+      if (!confirm) {
+        passwordMatchHint.textContent = "";
+        return;
+      }
+
+      if (password === confirm) {
+        passwordMatchHint.className = "mt-1 text-xs text-emerald-700 dark:text-emerald-300";
+        passwordMatchHint.textContent = "Passwords match.";
+      } else {
+        passwordMatchHint.className = "mt-1 text-xs text-rose-700 dark:text-rose-300";
+        passwordMatchHint.textContent = "Passwords do not match yet.";
+      }
+    }
+
+    function togglePasswordField(input, button) {
+      const isPassword = input.type === "password";
+      input.type = isPassword ? "text" : "password";
+      button.textContent = isPassword ? "Hide" : "Show";
+    }
+
+    togglePassword.addEventListener("click", () => {
+      togglePasswordField(passwordInput, togglePassword);
+    });
+
+    toggleConfirmPassword.addEventListener("click", () => {
+      togglePasswordField(confirmPasswordInput, toggleConfirmPassword);
+    });
+
+    passwordInput.addEventListener("input", updatePasswordQuality);
+    confirmPasswordInput.addEventListener("input", updatePasswordQuality);
+
+    signupForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value.trim();
+      const confirmPassword = confirmPasswordInput.value.trim();
+      const name = nameInput.value.trim();
+
+      if (!email || !password || !confirmPassword || !name) {
+        showMessage("Please fill in all fields.", "error");
+        return;
+      }
+
+      if (password !== confirmPassword) {
+        showMessage("Passwords do not match.", "error");
+        return;
+      }
+
+      if (adminAllowlist.includes(email.toLowerCase())) {
+        showMessage("This email is reserved for admin access and cannot be used for user sign up.", "error");
+        return;
+      }
+
+      try {
+        const user = await ServerAPI.signup(email, password, name);
+        FinanceDB.setUserSession(true, { email: user.email, name: user.name });
+
+        if (user.assignedPage) {
+          const assignments = getAssignments();
+          assignments[user.email.toLowerCase()] = user.assignedPage;
+          saveAssignments(assignments);
+        }
+
+        const page = user.assignedPage || getAssignedPage(user.email);
+        if (!page) {
+          showMessage("No personal page available. Please contact admin.", "error");
+          return;
+        }
+
+        window.location.href = page;
+      } catch (error) {
+        showMessage(error.message || "Unable to create account.", "error");
+      }
+    });
+  </script>
+</body>
+</html>
+

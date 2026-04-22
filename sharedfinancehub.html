@@ -1,0 +1,821 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shared Finance Hub</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ["Sora", "ui-sans-serif", "system-ui"],
+            body: ["Space Grotesk", "ui-sans-serif", "system-ui"]
+          },
+          colors: {
+            brand: {
+              50: "#ecfeff",
+              100: "#cffafe",
+              500: "#06b6d4",
+              700: "#0e7490",
+              900: "#164e63"
+            }
+          },
+          boxShadow: {
+            soft: "0 20px 45px rgba(15, 23, 42, 0.12)"
+          },
+          keyframes: {
+            rise: {
+              "0%": { opacity: "0", transform: "translateY(16px)" },
+              "100%": { opacity: "1", transform: "translateY(0)" }
+            }
+          },
+          animation: {
+            rise: "rise 700ms ease both"
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="app-db.js"></script>
+  <script src="server-api.js"></script>
+  <script src="api-client.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-900 font-body transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div class="min-h-screen bg-[radial-gradient(circle_at_0%_0%,#fef3c7_0%,transparent_40%),radial-gradient(circle_at_100%_0%,#bae6fd_0%,transparent_40%),linear-gradient(160deg,#f8fafc_0%,#e2e8f0_100%)] dark:bg-[radial-gradient(circle_at_0%_0%,rgba(245,158,11,0.20)_0%,transparent_40%),radial-gradient(circle_at_100%_0%,rgba(34,211,238,0.18)_0%,transparent_40%),linear-gradient(160deg,#020617_0%,#0f172a_100%)]">
+    <main class="mx-auto w-[min(1200px,95vw)] py-8 md:py-12 space-y-6">
+      <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-cyan-900 to-emerald-700 px-5 py-10 md:px-10 md:py-14 text-white shadow-soft animate-rise dark:from-slate-950 dark:via-sky-950 dark:to-emerald-950">
+        <div class="absolute -top-24 -right-20 h-72 w-72 rounded-full bg-white/10 blur-2xl"></div>
+        <div class="absolute -bottom-28 -left-16 h-72 w-72 rounded-full bg-cyan-300/20 blur-2xl"></div>
+        <div class="absolute left-4 right-4 top-4 flex flex-wrap justify-end gap-2 sm:left-auto sm:right-4">
+          <button id="logoutButton" type="button" class="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50">
+            Logout
+          </button>
+          <button id="themeToggle" type="button" class="grid h-11 w-11 place-items-center rounded-full border border-white/20 bg-white/10 text-white backdrop-blur transition hover:bg-white/20 focus:outline-none focus:ring-2 focus:ring-white/50" aria-label="Toggle dark and light mode">
+          <svg id="themeIconSun" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg id="themeIconMoon" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+          </button>
+        </div>
+        <div class="relative pt-14 pr-0 sm:pt-0 sm:pr-16">
+          <p class="inline-flex rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest">Smart Shared Finance Platform</p>
+          <h1 class="mt-4 font-display text-3xl md:text-5xl font-extrabold leading-tight">Track, split, and settle shared money without confusion.</h1>
+          <p class="mt-4 max-w-3xl text-cyan-50/90 md:text-lg">
+            Build transparency for families, friends, and roommates. Create groups, record expenses, split fairly,
+            monitor balances in real-time, and get AI-style insights to reduce waste and financial conflict.
+          </p>
+          <div class="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3" id="heroStats"></div>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <article class="lg:col-span-2 rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+          <div class="flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="font-display text-xl md:text-2xl font-bold">Group Members</h2>
+              <p class="text-slate-600 text-sm md:text-base dark:text-slate-300">Create your shared expense circle and track balance by member.</p>
+            </div>
+            <form id="memberForm" class="flex w-full md:w-auto gap-2">
+              <input id="memberName" type="text" placeholder="Add member name" class="w-full md:w-56 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
+              <button class="rounded-xl bg-cyan-600 px-4 py-2 text-sm font-semibold text-white hover:bg-cyan-700">Add</button>
+            </form>
+          </div>
+          <div id="membersGrid" class="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3"></div>
+        </article>
+
+        <article class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+          <h3 class="font-display text-lg md:text-xl font-bold">Budget Planner</h3>
+          <p class="text-slate-600 text-sm dark:text-slate-300">Set monthly budget and savings goal.</p>
+          <div class="mt-4 space-y-3">
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200">Monthly Budget (INR)
+              <input id="budgetInput" type="number" min="0" value="30000" class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" />
+            </label>
+            <label class="block text-sm font-medium text-slate-700 dark:text-slate-200">Savings Goal (INR)
+              <input id="goalInput" type="number" min="0" value="12000" class="mt-1 w-full rounded-xl border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" />
+            </label>
+          </div>
+          <div class="mt-5 space-y-3" id="budgetStats"></div>
+        </article>
+      </section>
+
+      <section class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+        <div class="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <h2 class="font-display text-xl md:text-2xl font-bold">Add Shared Expense</h2>
+            <p class="text-slate-600 text-sm md:text-base dark:text-slate-300">Record payments and split costs fairly across members in real-time.</p>
+          </div>
+        </div>
+
+        <form id="expenseForm" class="mt-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-3">
+          <input id="expenseTitle" type="text" placeholder="Expense title" required class="xl:col-span-2 rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" />
+
+          <input id="expenseAmount" type="number" min="1" step="0.01" placeholder="Amount" required class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" />
+
+          <select id="expenseCategory" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100">
+            <option value="Food">Food</option>
+            <option value="Rent">Rent</option>
+            <option value="Utilities">Utilities</option>
+            <option value="Transport">Transport</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Other">Other</option>
+          </select>
+
+          <select id="expensePayer" class="rounded-xl border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100"></select>
+
+          <button class="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-700">Record Expense</button>
+        </form>
+
+        <p class="mt-5 text-xs font-medium uppercase tracking-wider text-slate-500 dark:text-slate-400 md:hidden">Swipe to view full table</p>
+        <div class="mt-2 overflow-x-auto rounded-2xl border border-slate-200 dark:border-slate-800">
+          <table class="min-w-full whitespace-nowrap text-sm">
+            <thead class="bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+              <tr>
+                <th class="px-3 py-2 text-left">Title</th>
+                <th class="px-3 py-2 text-left">Category</th>
+                <th class="px-3 py-2 text-left">Payer</th>
+                <th class="px-3 py-2 text-left">Amount</th>
+                <th class="px-3 py-2 text-left">Split/member</th>
+                <th class="px-3 py-2 text-left">Time</th>
+              </tr>
+            </thead>
+            <tbody id="expenseRows" class="divide-y divide-slate-100 dark:divide-slate-800"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <article class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+          <h3 class="font-display text-xl font-bold">Live Balances</h3>
+          <p class="text-slate-600 text-sm dark:text-slate-300">Positive means the group owes this member. Negative means this member owes others.</p>
+          <div id="balancesGrid" class="mt-4 space-y-3"></div>
+        </article>
+
+        <article class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+          <h3 class="font-display text-xl font-bold">Spending Insights</h3>
+          <p class="text-slate-600 text-sm dark:text-slate-300">Real-time pattern view and unnecessary expense detection.</p>
+          <div id="insightSummary" class="mt-4 space-y-3"></div>
+          <div id="categoryBars" class="mt-5 space-y-3"></div>
+        </article>
+      </section>
+
+      <section class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <h3 class="font-display text-xl md:text-2xl font-bold">Live API Intelligence</h3>
+            <p class="text-slate-600 text-sm md:text-base dark:text-slate-300">Real-time integrations for exchange rates, money guidance, and India time zone updates.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <p id="apiStatus" class="rounded-full border border-slate-300 bg-slate-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-slate-700 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200">Loading...</p>
+            <button id="apiRefreshButton" type="button" class="rounded-full bg-slate-900 px-4 py-2 text-xs font-semibold uppercase tracking-widest text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200">Refresh APIs</button>
+          </div>
+        </div>
+
+        <div class="mt-5 grid grid-cols-1 gap-4 lg:grid-cols-3">
+          <article class="rounded-2xl border border-slate-200 bg-slate-50 p-4 dark:border-slate-800 dark:bg-slate-950 lg:col-span-2">
+            <div class="flex items-center justify-between gap-2">
+              <h4 class="font-semibold text-slate-900 dark:text-slate-100">INR Exchange Board</h4>
+              <p id="ratesUpdatedAt" class="text-xs text-slate-500 dark:text-slate-400"></p>
+            </div>
+            <div id="ratesGrid" class="mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3"></div>
+          </article>
+
+          <article class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900/40 dark:bg-emerald-950/30">
+            <h4 class="font-semibold text-emerald-900 dark:text-emerald-100">Smart Advice Feed</h4>
+            <p id="financeTipText" class="mt-2 text-sm text-emerald-800 dark:text-emerald-200"></p>
+            <p id="adviceProvider" class="mt-3 text-xs uppercase tracking-widest text-emerald-700/80 dark:text-emerald-300/80"></p>
+          </article>
+        </div>
+
+        <div class="mt-4 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 dark:border-cyan-900/40 dark:bg-cyan-950/30">
+          <p class="text-xs uppercase tracking-widest text-cyan-700 dark:text-cyan-300">India Clock</p>
+          <p id="indiaTimeText" class="mt-1 font-display text-xl font-bold text-cyan-900 dark:text-cyan-100"></p>
+          <p id="timeProvider" class="mt-1 text-xs text-cyan-700/80 dark:text-cyan-300/80"></p>
+        </div>
+      </section>
+
+      <section class="rounded-3xl border border-slate-200 bg-white p-5 md:p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+        <h3 class="font-display text-xl md:text-2xl font-bold">How This Platform Reduces Conflicts</h3>
+        <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3">
+          <article class="rounded-2xl border border-cyan-200 bg-cyan-50 p-4 dark:border-cyan-900/40 dark:bg-cyan-950/40">
+            <h4 class="font-semibold text-cyan-900 dark:text-cyan-100">Transparent Splits</h4>
+            <p class="text-sm text-cyan-800 dark:text-cyan-200 mt-1">Every expense is visible with payer, category, amount, and equal-share distribution.</p>
+          </article>
+          <article class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 dark:border-emerald-900/40 dark:bg-emerald-950/40">
+            <h4 class="font-semibold text-emerald-900 dark:text-emerald-100">Real-Time Balance View</h4>
+            <p class="text-sm text-emerald-800 dark:text-emerald-200 mt-1">No hidden dues. Members instantly see who paid more and who should settle.</p>
+          </article>
+          <article class="rounded-2xl border border-amber-200 bg-amber-50 p-4 dark:border-amber-900/40 dark:bg-amber-950/40">
+            <h4 class="font-semibold text-amber-900 dark:text-amber-100">Smart Alerts</h4>
+            <p class="text-sm text-amber-800 dark:text-amber-200 mt-1">Spending spikes and low-value repetitive purchases are flagged early.</p>
+          </article>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const pagePool = [
+      "user-home-1.html",
+      "user-home-2.html",
+      "user-home-3.html",
+      "user-home-4.html",
+      "user-home-5.html",
+      "user-home-6.html",
+      "user-home-7.html",
+      "user-home-8.html",
+      "user-home-9.html",
+      "user-home-10.html"
+    ];
+    const adminAllowlist = ["admin@sharedfinancehub.com", "owner@sharedfinancehub.com"];
+
+    const memberForm = document.getElementById("memberForm");
+    const memberName = document.getElementById("memberName");
+    const membersGrid = document.getElementById("membersGrid");
+    const expensePayer = document.getElementById("expensePayer");
+    const expenseForm = document.getElementById("expenseForm");
+    const expenseTitle = document.getElementById("expenseTitle");
+    const expenseAmount = document.getElementById("expenseAmount");
+    const expenseCategory = document.getElementById("expenseCategory");
+    const expenseRows = document.getElementById("expenseRows");
+    const heroStats = document.getElementById("heroStats");
+    const balancesGrid = document.getElementById("balancesGrid");
+    const insightSummary = document.getElementById("insightSummary");
+    const categoryBars = document.getElementById("categoryBars");
+    const budgetInput = document.getElementById("budgetInput");
+    const goalInput = document.getElementById("goalInput");
+    const budgetStats = document.getElementById("budgetStats");
+    const themeToggle = document.getElementById("themeToggle");
+    const logoutButton = document.getElementById("logoutButton");
+    const themeIconSun = document.getElementById("themeIconSun");
+    const themeIconMoon = document.getElementById("themeIconMoon");
+    const apiRefreshButton = document.getElementById("apiRefreshButton");
+    const apiStatus = document.getElementById("apiStatus");
+    const ratesUpdatedAt = document.getElementById("ratesUpdatedAt");
+    const ratesGrid = document.getElementById("ratesGrid");
+    const financeTipText = document.getElementById("financeTipText");
+    const adviceProvider = document.getElementById("adviceProvider");
+    const indiaTimeText = document.getElementById("indiaTimeText");
+    const timeProvider = document.getElementById("timeProvider");
+
+    if (!FinanceDB.getUserSession().authenticated || !ServerAPI.getToken()) {
+      window.location.replace("login.html");
+    }
+
+    const currentUser = FinanceDB.getUserSession().user;
+
+    if (!currentUser || !currentUser.email) {
+      FinanceDB.clearUserSession();
+      window.location.replace("login.html");
+    }
+
+    if (adminAllowlist.includes(currentUser.email.toLowerCase())) {
+      FinanceDB.clearUserSession();
+      window.location.replace("admin-login.html");
+    }
+
+    function getAssignments() {
+      return FinanceDB.getPageAssignments();
+    }
+
+    function saveAssignments(assignments) {
+      FinanceDB.setPageAssignments(assignments);
+    }
+
+    function getAssignedPage(email) {
+      const assignments = getAssignments();
+      const normalizedEmail = email.toLowerCase();
+      if (assignments[normalizedEmail]) {
+        return assignments[normalizedEmail];
+      }
+
+      const used = new Set(Object.values(assignments));
+      const available = pagePool.find((page) => !used.has(page));
+      if (!available) return null;
+
+      assignments[normalizedEmail] = available;
+      saveAssignments(assignments);
+      return available;
+    }
+
+    const assignedPage = getAssignedPage(currentUser.email);
+    if (!assignedPage) {
+      alert("No personal page available for this account.");
+      window.location.replace("login.html");
+    }
+
+    const params = new URLSearchParams(window.location.search);
+    const embedMode = params.get("embed") === "1";
+    const pageHint = (params.get("page") || "").toLowerCase();
+    const currentPage = window.location.pathname.split("/").pop().toLowerCase();
+    if (currentPage !== assignedPage.toLowerCase() && currentPage !== "sharedfinancehub.html") {
+      window.location.replace(assignedPage);
+    }
+
+    if (currentPage === "sharedfinancehub.html") {
+      if (!(embedMode && pageHint === assignedPage.toLowerCase())) {
+        window.location.replace(assignedPage);
+      }
+    }
+
+    if (embedMode && pageHint && pageHint !== assignedPage.toLowerCase()) {
+      window.top.location.replace(assignedPage);
+    }
+
+    const financeStateKey = `shared-finance-state-${assignedPage.toLowerCase()}`;
+
+    function createDefaultState() {
+      const seedMembers = [
+        { id: crypto.randomUUID(), name: currentUser.name || "You" },
+        { id: crypto.randomUUID(), name: "Member 2" },
+        { id: crypto.randomUUID(), name: "Member 3" }
+      ];
+
+      return {
+        members: seedMembers,
+        expenses: [
+          {
+            id: crypto.randomUUID(),
+            title: "Groceries",
+            category: "Food",
+            payerId: seedMembers[0].id,
+            amount: 2200,
+            createdAt: new Date(Date.now() - 86400000 * 2).toISOString()
+          },
+          {
+            id: crypto.randomUUID(),
+            title: "Electricity Bill",
+            category: "Utilities",
+            payerId: seedMembers[1].id,
+            amount: 1600,
+            createdAt: new Date(Date.now() - 86400000).toISOString()
+          },
+          {
+            id: crypto.randomUUID(),
+            title: "Movie Night",
+            category: "Entertainment",
+            payerId: seedMembers[2].id,
+            amount: 1200,
+            createdAt: new Date().toISOString()
+          }
+        ],
+        budget: 30000,
+        goal: 12000
+      };
+    }
+
+    function loadUserState() {
+      const parsed = FinanceDB.getFinanceState(financeStateKey);
+      if (!parsed || !Array.isArray(parsed.members) || !Array.isArray(parsed.expenses)) {
+        return createDefaultState();
+      }
+      return parsed;
+    }
+
+    function applyServerState(state) {
+      if (!state || !Array.isArray(state.members) || !Array.isArray(state.expenses)) {
+        return;
+      }
+
+      members = state.members;
+      expenses = state.expenses.map((expense) => ({
+        ...expense,
+        createdAt: new Date(expense.createdAt)
+      }));
+      budgetInput.value = String(state.budget || 30000);
+      goalInput.value = String(state.goal || 12000);
+      FinanceDB.setFinanceState(financeStateKey, state);
+      refreshUI();
+    }
+
+    let members = [];
+    let expenses = [];
+
+    function saveUserState() {
+      const snapshot = {
+        members,
+        expenses: expenses.map((expense) => ({
+          ...expense,
+          createdAt: new Date(expense.createdAt).toISOString()
+        })),
+        budget: Number(budgetInput.value) || 0,
+        goal: Number(goalInput.value) || 0
+      };
+      FinanceDB.setFinanceState(financeStateKey, snapshot);
+      if (window.ServerAPI && typeof ServerAPI.setFinanceState === "function") {
+        ServerAPI.setFinanceState(assignedPage.toLowerCase(), snapshot).catch(() => {
+          // Keep local state working even if server sync fails.
+        });
+      }
+    }
+
+    const initialState = loadUserState();
+    members = initialState.members;
+    expenses = initialState.expenses.map((expense) => ({
+      ...expense,
+      createdAt: new Date(expense.createdAt)
+    }));
+    budgetInput.value = String(initialState.budget || 30000);
+    goalInput.value = String(initialState.goal || 12000);
+
+    if (window.ServerAPI && typeof ServerAPI.getFinanceState === "function") {
+      ServerAPI.getFinanceState(assignedPage.toLowerCase())
+        .then((serverState) => {
+          if (serverState) {
+            applyServerState(serverState);
+          }
+        })
+        .catch(() => {
+          // Fall back to local state if server fetch is unavailable.
+        });
+    }
+
+    function inr(value) {
+      return new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR", maximumFractionDigits: 0 }).format(value);
+    }
+
+    function getMemberName(id) {
+      const found = members.find((m) => m.id === id);
+      return found ? found.name : "Unknown";
+    }
+
+    function renderMemberOptions() {
+      expensePayer.innerHTML = "";
+      members.forEach((member) => {
+        const option = document.createElement("option");
+        option.value = member.id;
+        option.textContent = member.name;
+        expensePayer.appendChild(option);
+      });
+    }
+
+    function renderMembers() {
+      membersGrid.innerHTML = "";
+      members.forEach((member) => {
+        const chip = document.createElement("div");
+        chip.className = "rounded-2xl border border-slate-200 bg-slate-50 px-3 py-3 dark:border-slate-800 dark:bg-slate-950";
+        chip.innerHTML = `
+          <p class="font-semibold text-slate-800 dark:text-slate-100">${member.name}</p>
+          <p class="text-xs text-slate-500 dark:text-slate-400">Active member</p>
+        `;
+        membersGrid.appendChild(chip);
+      });
+    }
+
+    function getBalances() {
+      const balances = Object.fromEntries(members.map((m) => [m.id, 0]));
+      expenses.forEach((expense) => {
+        const share = expense.amount / members.length;
+        balances[expense.payerId] += expense.amount;
+        members.forEach((member) => {
+          balances[member.id] -= share;
+        });
+      });
+      return balances;
+    }
+
+    function totalSpent() {
+      return expenses.reduce((sum, exp) => sum + exp.amount, 0);
+    }
+
+    function categoryTotals() {
+      return expenses.reduce((acc, exp) => {
+        acc[exp.category] = (acc[exp.category] || 0) + exp.amount;
+        return acc;
+      }, {});
+    }
+
+    function detectLeakSignals() {
+      const totals = categoryTotals();
+      const total = totalSpent();
+      const issues = [];
+
+      Object.entries(totals).forEach(([category, amount]) => {
+        const ratio = total > 0 ? amount / total : 0;
+        if ((category === "Entertainment" || category === "Shopping") && ratio > 0.35) {
+          issues.push(`High ${category.toLowerCase()} spending detected (${Math.round(ratio * 100)}% of total).`);
+        }
+      });
+
+      const smallFrequent = expenses.filter((e) => e.amount <= 500).length;
+      if (smallFrequent >= 4) {
+        issues.push("Frequent low-value expenses may be leaking monthly cash flow.");
+      }
+
+      if (issues.length === 0) {
+        issues.push("No major leak pattern detected yet. Keep logging expenses for stronger predictions.");
+      }
+
+      return issues;
+    }
+
+    function renderBalances() {
+      const balances = getBalances();
+      balancesGrid.innerHTML = "";
+
+      members.forEach((member) => {
+        const value = balances[member.id];
+        const positive = value >= 0;
+        const normalized = Math.min(100, Math.round((Math.abs(value) / Math.max(1, totalSpent())) * 100));
+
+        const card = document.createElement("div");
+        card.className = "rounded-2xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950";
+        card.innerHTML = `
+          <div class="flex items-center justify-between gap-2">
+            <p class="font-semibold text-slate-800 dark:text-slate-100">${member.name}</p>
+            <span class="text-sm font-semibold ${positive ? "text-emerald-700 dark:text-emerald-400" : "text-rose-700 dark:text-rose-400"}">${positive ? "+" : ""}${inr(value)}</span>
+          </div>
+          <div class="mt-2 h-2 rounded-full bg-slate-200 overflow-hidden dark:bg-slate-800">
+            <div class="h-full ${positive ? "bg-emerald-500" : "bg-rose-500"}" style="width:${normalized}%"></div>
+          </div>
+        `;
+        balancesGrid.appendChild(card);
+      });
+    }
+
+    function renderExpenseTable() {
+      expenseRows.innerHTML = "";
+      const share = members.length > 0 ? 1 / members.length : 0;
+
+      [...expenses]
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .forEach((expense) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td class="px-3 py-2 font-medium text-slate-800 dark:text-slate-100">${expense.title}</td>
+            <td class="px-3 py-2 text-slate-700 dark:text-slate-300">${expense.category}</td>
+            <td class="px-3 py-2 text-slate-700 dark:text-slate-300">${getMemberName(expense.payerId)}</td>
+            <td class="px-3 py-2 text-slate-700 dark:text-slate-300">${inr(expense.amount)}</td>
+            <td class="px-3 py-2 text-slate-700 dark:text-slate-300">${inr(expense.amount * share)}</td>
+            <td class="px-3 py-2 text-slate-500 dark:text-slate-400">${new Date(expense.createdAt).toLocaleString()}</td>
+          `;
+          expenseRows.appendChild(row);
+        });
+    }
+
+    function renderHeroStats() {
+      const total = totalSpent();
+      const leaks = detectLeakSignals().length;
+      const groups = 1;
+      const membersCount = members.length;
+
+      heroStats.innerHTML = `
+        <article class="rounded-2xl border border-white/20 bg-white/10 px-3 py-3"><p class="text-xs text-cyan-100">Active Group</p><p class="font-display text-xl font-bold">${groups}</p></article>
+        <article class="rounded-2xl border border-white/20 bg-white/10 px-3 py-3"><p class="text-xs text-cyan-100">Members</p><p class="font-display text-xl font-bold">${membersCount}</p></article>
+        <article class="rounded-2xl border border-white/20 bg-white/10 px-3 py-3"><p class="text-xs text-cyan-100">Total Tracked</p><p class="font-display text-xl font-bold">${inr(total)}</p></article>
+        <article class="rounded-2xl border border-white/20 bg-white/10 px-3 py-3"><p class="text-xs text-cyan-100">Leak Signals</p><p class="font-display text-xl font-bold">${leaks}</p></article>
+      `;
+    }
+
+    function renderInsights() {
+      const totals = categoryTotals();
+      const total = Math.max(totalSpent(), 1);
+
+      categoryBars.innerHTML = "";
+      Object.entries(totals)
+        .sort((a, b) => b[1] - a[1])
+        .forEach(([category, amount]) => {
+          const pct = Math.round((amount / total) * 100);
+          const block = document.createElement("div");
+          block.innerHTML = `
+            <div class="mb-1 flex items-center justify-between text-sm">
+              <span class="font-medium text-slate-700 dark:text-slate-200">${category}</span>
+              <span class="text-slate-500 dark:text-slate-400">${inr(amount)} (${pct}%)</span>
+            </div>
+            <div class="h-2.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+              <div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-500" style="width:${pct}%"></div>
+            </div>
+          `;
+          categoryBars.appendChild(block);
+        });
+
+      const leaks = detectLeakSignals();
+      insightSummary.innerHTML = leaks
+        .map((text) => `<div class="rounded-xl border border-amber-200 bg-amber-50 p-3 text-sm text-amber-900 dark:border-amber-900/40 dark:bg-amber-950/40 dark:text-amber-100">${text}</div>`)
+        .join("");
+    }
+
+    function renderBudget() {
+      const budget = Number(budgetInput.value) || 0;
+      const goal = Number(goalInput.value) || 0;
+      const spent = totalSpent();
+      const remaining = budget - spent;
+      const savedPotential = Math.max(0, budget - spent);
+      const goalPct = goal > 0 ? Math.min(100, Math.round((savedPotential / goal) * 100)) : 0;
+
+      budgetStats.innerHTML = `
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">
+          <p class="text-xs text-slate-500 dark:text-slate-400">Spent This Cycle</p>
+          <p class="font-semibold text-slate-900 dark:text-slate-100">${inr(spent)}</p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">
+          <p class="text-xs text-slate-500 dark:text-slate-400">Budget Remaining</p>
+          <p class="font-semibold ${remaining >= 0 ? "text-emerald-700 dark:text-emerald-400" : "text-rose-700 dark:text-rose-400"}">${inr(remaining)}</p>
+        </div>
+        <div class="rounded-xl border border-slate-200 bg-slate-50 p-3 dark:border-slate-800 dark:bg-slate-950">
+          <div class="flex items-center justify-between text-xs text-slate-600 dark:text-slate-400">
+            <span>Savings Goal Progress</span><span>${goalPct}%</span>
+          </div>
+          <div class="mt-2 h-2.5 overflow-hidden rounded-full bg-slate-200 dark:bg-slate-800">
+            <div class="h-full bg-emerald-500" style="width:${goalPct}%"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function applyTheme(theme) {
+      const isDark = theme === "dark";
+      document.documentElement.classList.toggle("dark", isDark);
+      themeIconSun.classList.toggle("hidden", isDark);
+      themeIconMoon.classList.toggle("hidden", !isDark);
+      themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      FinanceDB.setTheme(theme);
+    }
+
+    function formatApiTime(iso) {
+      const date = new Date(iso);
+      if (Number.isNaN(date.getTime())) {
+        return "Unavailable";
+      }
+      return date.toLocaleString("en-IN", {
+        dateStyle: "medium",
+        timeStyle: "short"
+      });
+    }
+
+    function renderRates(rates) {
+      const safeRates = rates && rates.rates ? rates.rates : {};
+      const entries = ["USD", "EUR", "GBP", "AED"];
+      ratesGrid.innerHTML = entries
+        .map((code) => {
+          const value = Number(safeRates[code] || 0);
+          return `
+            <article class="rounded-xl border border-slate-200 bg-white p-3 dark:border-slate-700 dark:bg-slate-900">
+              <p class="text-xs uppercase tracking-widest text-slate-500 dark:text-slate-400">1 INR</p>
+              <p class="mt-1 font-display text-lg font-bold text-slate-900 dark:text-slate-100">${value.toFixed(4)} ${code}</p>
+            </article>
+          `;
+        })
+        .join("");
+      ratesUpdatedAt.textContent = `Updated: ${rates && rates.updatedAt ? rates.updatedAt : "Unavailable"}`;
+    }
+
+    function renderLiveFeed(feed) {
+      renderRates(feed.rates || null);
+
+      financeTipText.textContent = feed.advice && feed.advice.text
+        ? feed.advice.text
+        : "Split recurring bills as soon as you pay them to avoid end-of-month stress.";
+      adviceProvider.textContent = `Source: ${feed.advice && feed.advice.provider ? feed.advice.provider : "offline-default"}`;
+
+      indiaTimeText.textContent = formatApiTime(feed.indiaTime && feed.indiaTime.iso ? feed.indiaTime.iso : "");
+      timeProvider.textContent = `Timezone: ${feed.indiaTime && feed.indiaTime.zone ? feed.indiaTime.zone : "Asia/Kolkata"} | Source: ${feed.indiaTime && feed.indiaTime.provider ? feed.indiaTime.provider : "offline-default"}`;
+
+      const hasErrors = feed.errors && (feed.errors.rates || feed.errors.advice || feed.errors.indiaTime);
+      if (hasErrors) {
+        apiStatus.className = "rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-200";
+        apiStatus.textContent = "Partial API data";
+      } else {
+        apiStatus.className = "rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-emerald-800 dark:border-emerald-900/40 dark:bg-emerald-950/30 dark:text-emerald-200";
+        apiStatus.textContent = "Live API connected";
+      }
+    }
+
+    async function refreshApiFeed(useCacheFirst) {
+      if (!window.FinanceAPI) {
+        apiStatus.className = "rounded-full border border-rose-300 bg-rose-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-rose-800 dark:border-rose-900/40 dark:bg-rose-950/30 dark:text-rose-200";
+        apiStatus.textContent = "API client missing";
+        return;
+      }
+
+      const cached = FinanceAPI.getCachedDashboardFeed();
+      if (useCacheFirst && cached) {
+        renderLiveFeed(cached);
+      }
+
+      apiRefreshButton.disabled = true;
+      apiRefreshButton.textContent = "Refreshing...";
+      try {
+        const feed = await FinanceAPI.fetchDashboardFeed();
+        renderLiveFeed(feed);
+      } catch {
+        if (cached) {
+          renderLiveFeed(cached);
+          apiStatus.className = "rounded-full border border-amber-300 bg-amber-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-amber-800 dark:border-amber-900/40 dark:bg-amber-950/30 dark:text-amber-200";
+          apiStatus.textContent = "Using cached API";
+        } else {
+          apiStatus.className = "rounded-full border border-rose-300 bg-rose-50 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-rose-800 dark:border-rose-900/40 dark:bg-rose-950/30 dark:text-rose-200";
+          apiStatus.textContent = "API unavailable";
+        }
+      } finally {
+        apiRefreshButton.disabled = false;
+        apiRefreshButton.textContent = "Refresh APIs";
+      }
+    }
+
+    function refreshUI() {
+      renderMemberOptions();
+      renderMembers();
+      renderExpenseTable();
+      renderBalances();
+      renderHeroStats();
+      renderInsights();
+      renderBudget();
+    }
+
+    const savedTheme = FinanceDB.getTheme();
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(savedTheme || (prefersDark ? "dark" : "light"));
+
+    themeToggle.addEventListener("click", () => {
+      applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+    });
+
+    apiRefreshButton.addEventListener("click", () => {
+      refreshApiFeed(false);
+    });
+
+    logoutButton.addEventListener("click", () => {
+      ServerAPI.signout().finally(() => {
+        FinanceDB.clearUserSession();
+        FinanceDB.clearAdminSession();
+        window.top.location.href = "login.html";
+      });
+    });
+
+    memberForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const name = memberName.value.trim();
+      if (!name) return;
+      members.push({ id: crypto.randomUUID(), name });
+      memberName.value = "";
+      saveUserState();
+      refreshUI();
+    });
+
+    expenseForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (members.length < 2) {
+        alert("Add at least 2 members before recording shared expenses.");
+        return;
+      }
+
+      const title = expenseTitle.value.trim();
+      const amount = Number(expenseAmount.value);
+      const payerId = expensePayer.value;
+      const category = expenseCategory.value;
+
+      if (!title || !amount || amount <= 0 || !payerId) return;
+
+      expenses.push({
+        id: crypto.randomUUID(),
+        title,
+        category,
+        payerId,
+        amount,
+        createdAt: new Date()
+      });
+
+      expenseTitle.value = "";
+      expenseAmount.value = "";
+      saveUserState();
+      refreshUI();
+    });
+
+    budgetInput.addEventListener("input", () => {
+      renderBudget();
+      saveUserState();
+    });
+
+    goalInput.addEventListener("input", () => {
+      renderBudget();
+      saveUserState();
+    });
+
+    saveUserState();
+    refreshUI();
+    refreshApiFeed(true);
+    ServerAPI.updatePresence().catch(() => {});
+    setInterval(() => {
+      ServerAPI.updatePresence().catch(() => {});
+    }, 30000);
+  </script>
+</body>
+</html>
+

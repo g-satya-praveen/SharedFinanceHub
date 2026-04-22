@@ -1,0 +1,181 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shared Finance Hub - Admin Login</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ["Sora", "ui-sans-serif", "system-ui"],
+            body: ["Space Grotesk", "ui-sans-serif", "system-ui"]
+          },
+          boxShadow: {
+            soft: "0 20px 45px rgba(15, 23, 42, 0.12)"
+          },
+          keyframes: {
+            rise: {
+              "0%": { opacity: "0", transform: "translateY(16px)" },
+              "100%": { opacity: "1", transform: "translateY(0)" }
+            }
+          },
+          animation: {
+            rise: "rise 700ms ease both"
+          }
+        }
+      }
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="app-db.js"></script>
+  <script src="server-api.js"></script>
+</head>
+<body class="font-body bg-slate-100 text-slate-900 transition-colors duration-300 dark:bg-slate-950 dark:text-slate-100">
+  <div class="min-h-screen bg-[radial-gradient(circle_at_0%_0%,#fef3c7_0%,transparent_38%),radial-gradient(circle_at_100%_0%,#bae6fd_0%,transparent_38%),linear-gradient(160deg,#f8fafc_0%,#e2e8f0_100%)] dark:bg-[radial-gradient(circle_at_0%_0%,rgba(245,158,11,0.20)_0%,transparent_38%),radial-gradient(circle_at_100%_0%,rgba(34,211,238,0.18)_0%,transparent_38%),linear-gradient(160deg,#020617_0%,#0f172a_100%)]">
+    <main class="mx-auto grid min-h-screen w-[min(1100px,95vw)] grid-cols-1 items-center gap-8 py-8 lg:grid-cols-2">
+      <section class="relative overflow-hidden rounded-3xl bg-gradient-to-br from-slate-900 via-cyan-900 to-emerald-700 p-8 text-white shadow-soft animate-rise dark:from-slate-950 dark:via-sky-950 dark:to-emerald-950">
+        <div class="absolute -top-24 -right-20 h-72 w-72 rounded-full bg-white/10 blur-2xl"></div>
+        <div class="absolute -bottom-24 -left-20 h-72 w-72 rounded-full bg-cyan-300/20 blur-2xl"></div>
+        <div class="relative">
+          <p class="inline-flex rounded-full border border-white/30 bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest">Admin access</p>
+          <h1 class="mt-4 font-display text-3xl md:text-5xl font-extrabold leading-tight">Restricted admin sign in.</h1>
+          <p class="mt-4 max-w-xl text-cyan-50/90 md:text-lg">
+            Only selected members can open the admin console. Use an approved email and matching password.
+          </p>
+        </div>
+      </section>
+
+      <section class="relative rounded-3xl border border-slate-200 bg-white p-6 shadow-soft animate-rise dark:border-slate-800 dark:bg-slate-900">
+        <button id="themeToggle" type="button" class="absolute right-4 top-4 grid h-11 w-11 place-items-center rounded-full border border-slate-200 bg-slate-100 text-slate-700 transition hover:bg-slate-200 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" aria-label="Toggle dark and light mode">
+          <svg id="themeIconSun" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2"></path>
+            <path d="M12 20v2"></path>
+            <path d="m4.93 4.93 1.41 1.41"></path>
+            <path d="m17.66 17.66 1.41 1.41"></path>
+            <path d="M2 12h2"></path>
+            <path d="M20 12h2"></path>
+            <path d="m6.34 17.66-1.41 1.41"></path>
+            <path d="m19.07 4.93-1.41 1.41"></path>
+          </svg>
+          <svg id="themeIconMoon" class="hidden h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <div class="pr-12">
+          <h2 class="font-display text-2xl md:text-3xl font-bold">Admin Login</h2>
+          <p class="mt-2 text-slate-600 dark:text-slate-300">Sign in with an approved admin account.</p>
+
+          <form id="adminLoginForm" class="mt-6 space-y-4">
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" for="email">Email</label>
+              <input id="email" type="email" placeholder="admin@sharedfinancehub.com" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
+            </div>
+            <div>
+              <label class="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-200" for="password">Password</label>
+              <input id="password" type="password" placeholder="Enter password" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-900 focus:border-cyan-500 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:border-slate-700 dark:bg-slate-950 dark:text-slate-100" required />
+            </div>
+            <button class="w-full rounded-xl bg-gradient-to-r from-cyan-600 to-emerald-600 px-4 py-3 font-semibold text-white transition hover:from-cyan-700 hover:to-emerald-700">Enter admin</button>
+          </form>
+
+          <div class="mt-5 flex flex-wrap items-center gap-3 text-sm">
+            <a href="login.html" class="rounded-full bg-slate-900 px-4 py-2 font-semibold text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200">User login</a>
+            <a href="signup.html" class="rounded-full border border-slate-300 px-4 py-2 font-semibold text-slate-700 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-200 dark:hover:bg-slate-800">Sign up</a>
+          </div>
+
+          <p id="messageBox" class="mt-4 hidden rounded-xl border px-4 py-3 text-sm"></p>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const adminAllowlist = ["admin@sharedfinancehub.com", "owner@sharedfinancehub.com"];
+    const themeToggle = document.getElementById("themeToggle");
+    const themeIconSun = document.getElementById("themeIconSun");
+    const themeIconMoon = document.getElementById("themeIconMoon");
+    const adminLoginForm = document.getElementById("adminLoginForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const messageBox = document.getElementById("messageBox");
+
+    function applyTheme(theme) {
+      const isDark = theme === "dark";
+      document.documentElement.classList.toggle("dark", isDark);
+      themeIconSun.classList.toggle("hidden", isDark);
+      themeIconMoon.classList.toggle("hidden", !isDark);
+      themeToggle.setAttribute("aria-label", isDark ? "Switch to light mode" : "Switch to dark mode");
+      FinanceDB.setTheme(theme);
+    }
+
+    function showMessage(text, kind) {
+      messageBox.className = "mt-4 rounded-xl border px-4 py-3 text-sm";
+      if (kind === "error") {
+        messageBox.classList.add("border-rose-200", "bg-rose-50", "text-rose-800", "dark:border-rose-900/40", "dark:bg-rose-950/40", "dark:text-rose-100");
+      } else {
+        messageBox.classList.add("border-emerald-200", "bg-emerald-50", "text-emerald-800", "dark:border-emerald-900/40", "dark:bg-emerald-950/40", "dark:text-emerald-100");
+      }
+      messageBox.textContent = text;
+      messageBox.classList.remove("hidden");
+    }
+
+    function clearMessage() {
+      messageBox.classList.add("hidden");
+      messageBox.textContent = "";
+    }
+
+    function isAllowedAdmin(email) {
+      return adminAllowlist.includes(email.toLowerCase());
+    }
+
+    const savedTheme = FinanceDB.getTheme();
+    const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    applyTheme(savedTheme || (prefersDark ? "dark" : "light"));
+
+    try {
+      const currentUser = ServerAPI.getCachedUser() || FinanceDB.getUserSession().user;
+      if (ServerAPI.getToken() && FinanceDB.getAdminSession() && currentUser && isAllowedAdmin(currentUser.email)) {
+        window.location.replace("admin.html");
+      }
+    } catch {
+      ServerAPI.clearToken();
+      FinanceDB.clearAdminSession();
+    }
+
+    themeToggle.addEventListener("click", () => {
+      applyTheme(document.documentElement.classList.contains("dark") ? "light" : "dark");
+    });
+
+    adminLoginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      clearMessage();
+
+      const email = emailInput.value.trim().toLowerCase();
+      const password = passwordInput.value.trim();
+      if (!email || !password) return;
+
+      try {
+        const user = await ServerAPI.adminLogin(email, password);
+        if (!isAllowedAdmin(user.email)) {
+          showMessage("Access denied. This account is not in the selected admin list.", "error");
+          return;
+        }
+
+        FinanceDB.setAdminSession(true);
+        FinanceDB.setUserSession(true, { email: user.email, name: user.name });
+        window.location.href = "admin.html";
+      } catch (error) {
+        showMessage(error.message || "Invalid admin credentials.", "error");
+      }
+    });
+  </script>
+</body>
+</html>
+
